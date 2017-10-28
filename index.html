@@ -69,6 +69,11 @@
             (function (w) {
                 'use strict';
 
+                let wrapper = document.getElementById('wrapper');
+                let countdown = new pl.Countdown();
+
+
+                wrapper.append( countdown.element );
 
             })(window);
         </script>

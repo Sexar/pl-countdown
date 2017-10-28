@@ -49,7 +49,7 @@ gulp.task('watch', () => {
 
     livereload.listen();
 
-    gulp.watch(files, ['stylus', 'ts', 'reload']);
+    gulp.watch(files, ['reload']);
 });
 
 
@@ -102,7 +102,7 @@ gulp.task('ts', () => {
     ];
 
     // Output file.
-    let outputFile = 'pl-progress-bar.min.ts';
+    let outputFile = 'pl-countdown.min.ts';
 
     return gulp.src(srcFiles)
         .pipe(plumber())
