@@ -27,6 +27,11 @@ module pl {
         private days: Element<HTMLElement>;
 
         /**
+         * @type Date
+         */
+        private deadline: Date;
+
+        /**
          * @type Object
          */
         private settings: Object;
@@ -34,10 +39,10 @@ module pl {
 
         /**
          * Create a countdown instance.
-         * @param {any} deadline
+         * @param {Date} deadline
          * @param {Object} settings
          */
-        constructor(deadline: any, settings: Object = {}) {
+        constructor(deadline: Date, settings: Object = {}) {
             super(document.createElement('div'));
 
             this.addClass('pl-countdown');
@@ -71,7 +76,7 @@ module pl {
 
 
             // Append elements to DOM.
-            //this.append()
+            // this.append();
 
 
             // Put digits to the class scope.
@@ -79,7 +84,6 @@ module pl {
             this.hours   = hoursDigits;
             this.minutes = minutesDigits;
             this.seconds = secondsDigits;
-
         }
 
         /**
