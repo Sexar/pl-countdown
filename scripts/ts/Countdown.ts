@@ -76,7 +76,12 @@ module pl {
 
 
             // Append elements to DOM.
-            // this.append();
+            this.append(ElementCollection.fromArray([ daysWraper, hoursWraper, minutesWraper, secondsWraper ]));
+
+            daysWraper.append(ElementCollection.fromArray([daysLabel, daysDigits]));
+            hoursWraper.append(ElementCollection.fromArray([hoursLabel, hoursDigits]));
+            minutesWraper.append(ElementCollection.fromArray([minutesLabel, minutesDigits]));
+            secondsWraper.append(ElementCollection.fromArray([secondsLabel, secondsDigits]));
 
 
             // Put digits to the class scope.

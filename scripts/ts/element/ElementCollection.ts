@@ -24,15 +24,19 @@ module pl {
 
         /**
          * Create an element collection from an array.
-         * @param {Array<Element>} list
+         * @param {Array<any>} list
          * @returns {pl.ElementCollection}
          */
-        static fromArray(list: Array<Element<HTMLElement>>): ElementCollection {
+        static fromArray(list: Array<any>): ElementCollection {
             let collection = new ElementCollection();
             let i, el;
 
             for (i = 0; el = list[i], i < list.length; i++) {
-                collection.add(new Element(el as HTMLElement));
+                if (el instanceof Element) {
+                    collection.add(el);
+                } else if (el instanceof HTMLElement) {
+                    collection.add(new Element(el as HTMLElement));
+                }
             }
 
             return collection;
