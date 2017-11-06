@@ -5,7 +5,7 @@ module pl {
 
     export class Countdown extends Element<HTMLElement> {
 
-        // region Properties
+        // region Fields
         /**
          * @type {Element<HTMLElement>}
          */
@@ -25,11 +25,6 @@ module pl {
          * @type {Element<HTMLElement>}
          */
         private seconds: Element<HTMLElement>;
-
-        /**
-         * @type {Date}
-         */
-        private endtime: Date;
 
         /**
          * @type {Object}
@@ -219,6 +214,29 @@ module pl {
          */
         stop() {
             clearInterval(this.interval);
+        }
+        // endregion
+
+        // region Properties
+        /**
+         * Endtime property.
+         */
+        private _endtime: Date;
+
+        /**
+         * Gets endtime property.
+         * @returns {Date}
+         */
+        get endtime(): Date {
+            return this._endtime;
+        }
+
+        /**
+         * Sets endtime property.
+         * @param {Date} value
+         */
+        set endtime(value: Date) {
+            this._endtime = value;
         }
         // endregion
 
