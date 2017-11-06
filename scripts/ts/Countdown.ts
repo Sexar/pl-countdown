@@ -7,105 +7,203 @@ module pl {
 
         // region Properties
         /**
-         * @type Element<HTMLElement>
-         */
-        private seconds: Element<HTMLElement>;
-
-        /**
-         * @type Element<HTMLElement>
-         */
-        private minutes: Element<HTMLElement>;
-
-        /**
-         * @type Element<HTMLElement>
-         */
-        private hours: Element<HTMLElement>;
-
-        /**
-         * @type Element<HTMLElement>
+         * @type {Element<HTMLElement>}
          */
         private days: Element<HTMLElement>;
 
         /**
-         * @type Date
+         * @type {Element<HTMLElement>}
          */
-        private deadline: Date;
+        private hours: Element<HTMLElement>;
 
         /**
-         * @type Object
+         * @type {Element<HTMLElement>}
+         */
+        private minutes: Element<HTMLElement>;
+
+        /**
+         * @type {Element<HTMLElement>}
+         */
+        private seconds: Element<HTMLElement>;
+
+        /**
+         * @type {Date}
+         */
+        private endtime: Date;
+
+        /**
+         * @type {Object}
          */
         private settings: Object;
+
+        /**
+         * @type {number}
+         */
+        private interval: number;
         // endregion
 
         /**
          * Create a countdown instance.
-         * @param {Date} deadline
+         * @param {Date} endtime
          * @param {Object} settings
          */
-        constructor(deadline: Date, settings: Object = {}) {
+        constructor(endtime: Date, settings: Object = {}) {
             super(document.createElement('div'));
 
-            this.addClass('pl-countdown');
+            this.endtime = endtime;
+            this.settings = Util.extends({
+                'separator': ':',
+                'daysLabel': 'Days',
+                'hoursLabel': 'Hours',
+                'minutesLabel': 'Minutes',
+                'secondsLabel': 'Seconds'
+            }, settings);
 
+            this.addClass('pl-countdown');
             this.buildOut();
-            this.update();
+            this.start();
+
         }
 
         // region Private Methods
         /**
-         * Create elements for countdown.
+         * Create countdown elements.
          */
         private buildOut() {
-            // Create Wrapers
-            let daysWraper    = Element.create('div.pl-days'),
-                hoursWraper   = Element.create('div.pl-hours'),
-                minutesWraper = Element.create('div.pl-minutes'),
-                secondsWraper = Element.create('div.pl-seconds');
+            // Create digit wrappers.
+            let daysWrapper    = Element.create('div'),
+                hoursWrapper   = Element.create('div'),
+                minutesWrapper = Element.create('div'),
+                secondsWrapper = Element.create('div');
 
-            // Create Labels
-            let daysLabel    = Element.create('span.pl-label'),
-                hoursLabel   = Element.create('span.pl-label'),
-                minutesLabel = Element.create('span.pl-label'),
-                secondsLabel = Element.create('span.pl-label');
+            // Create digits.
+            let days    = Element.create('span.pl-days'),
+                hours   = Element.create('span.pl-hours'),
+                minutes = Element.create('span.pl-minutes'),
+                seconds = Element.create('span.pl-seconds');
 
-            // Create Digits
-            let daysDigits    = Element.create('span.pl-digits'),
-                hoursDigits   = Element.create('span.pl-digits'),
-                minutesDigits = Element.create('span.pl-digits'),
-                secondsDigits = Element.create('span.pl-digits');
+            // Create labels.
+            let daysLabel    = Element.create('span.pl-days-label'),
+                hoursLabel   = Element.create('span.pl-hours-label'),
+                minutesLabel = Element.create('span.pl-minutes-label'),
+                secondsLabel = Element.create('span.pl-seconds-label');
+
+
+            // Set labels.
+            daysLabel.text(this.settings['daysLabel']);
+            hoursLabel.text(this.settings['hoursLabel']);
+            minutesLabel.text(this.settings['minutesLabel']);
+            secondsLabel.text(this.settings['secondsLabel']);
 
 
             // Append elements to DOM.
-            this.append(ElementCollection.fromArray([ daysWraper, hoursWraper, minutesWraper, secondsWraper ]));
+            this.append(ElementCollection.fromArray([
+                daysWrapper, hoursWrapper, minutesWrapper, secondsWrapper
+            ]));
 
-            daysWraper.append(ElementCollection.fromArray([daysLabel, daysDigits]));
-            hoursWraper.append(ElementCollection.fromArray([hoursLabel, hoursDigits]));
-            minutesWraper.append(ElementCollection.fromArray([minutesLabel, minutesDigits]));
-            secondsWraper.append(ElementCollection.fromArray([secondsLabel, secondsDigits]));
+            daysWrapper.append(days);
+            daysWrapper.append(daysLabel);
+
+            hoursWrapper.append(hours);
+            hoursWrapper.append(hoursLabel);
+
+            minutesWrapper.append(minutes);
+            minutesWrapper.append(minutesLabel);
+
+            secondsWrapper.append(seconds);
+            secondsWrapper.append(secondsLabel);
 
 
-            // Put digits to the class scope.
-            this.days    = daysDigits;
-            this.hours   = hoursDigits;
-            this.minutes = minutesDigits;
-            this.seconds = secondsDigits;
+            // Point to digit elements.
+            this.days    = days;
+            this.hours   = hours;
+            this.minutes = minutes;
+            this.seconds = seconds;
+
         }
 
         /**
          * Update countdown view.
+         * @param {Object} timeRemaining
          */
-        private update() {
-            this.days.text('31');
-            this.hours.text('12');
-            this.minutes.text('31');
-            this.seconds.text('06');
+        private update(timeRemaining: Object) {
+            this.days.text(timeRemaining['days']);
+            this.hours.text(timeRemaining['hours']);
+            this.minutes.text(timeRemaining['minutes']);
+            this.seconds.text(timeRemaining['seconds']);
 
         }
         // endregion
 
         // region Methods
-        getObject() {
+        /**
+         * Get time remaining from a now to a endtime.
+         * @param {Date} endtime
+         * @returns {Object}
+         */
+        getTimeRemaining(endtime): Object {
+            let timeRemaining = endtime.getTime() - new Date().getTime();
+            let days    = Math.floor( timeRemaining / ( 1000 * 60 * 60 * 24 ) ),
+                hours   = Math.floor( timeRemaining % ( 1000 * 60 * 60 * 24 ) / ( 1000 * 60 * 60 ) ),
+                minutes = Math.floor( timeRemaining % ( 1000 * 60 * 60 ) / ( 1000 * 60 ) ),
+                seconds = Math.floor( timeRemaining % ( 1000 * 60 ) / ( 1000 ) );
 
+            return {
+                'total'  : timeRemaining,
+                'days'   : days,
+                'hours'  : hours,
+                'minutes': minutes,
+                'seconds': seconds
+            };
+        }
+
+        /**
+         * Validate date.
+         * @param {string} date
+         * @returns {boolean}
+         */
+        isDateValid(date: string): boolean {
+            return /^((\d{1,2})[\-\/]){2}(\d{1,4})$/.test(date);
+        }
+
+        /**
+         * Validate time.
+         * @param {string} time
+         * @returns {boolean}
+         */
+        isTimeValid(time: string): boolean {
+            return /^([1-9]|(0|1)[0-9]|2[0-4])(:[0-5]?[0-9]){2}$/.test(time);
+        }
+
+        /**
+         * Validate endtime.
+         * @param {string} endtime
+         * @returns {boolean}
+         */
+        isEndtimeValid(endtime: string): boolean {
+            throw 'Not implemented yet';
+        }
+
+        /**
+         * Starts countdown.
+         */
+        start() {
+            this.interval = setInterval(() => {
+                let timeRemaining = this.getTimeRemaining(this.endtime);
+
+                this.update(timeRemaining);
+
+                if (timeRemaining['total'] <= 0) {
+                    clearInterval(this.interval)
+                }
+            }, 1000);
+        }
+
+        /**
+         * Stops countdown.
+         */
+        stop() {
+            clearInterval(this.interval);
         }
         // endregion
 

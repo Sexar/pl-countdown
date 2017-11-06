@@ -484,8 +484,8 @@ module pl {
          * @returns {undefined|text}
          */
         text(value: any) {
-            if ("string" === typeof value) {
-                this._element.innerText = value;
+            if ("undefined" !== typeof value) {
+                this._element.innerText = String(value);
             } else {
                 return this._element.innerText;
             }
