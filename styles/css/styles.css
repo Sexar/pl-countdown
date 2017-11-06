@@ -42,9 +42,19 @@ body {
   text-shadow: 1px 1px 5px rgba(0,0,0,0.65);
   width: 100%;
 }
-.pl-countdown > span:before {
-  content: ':';
+.pl-countdown:after {
+  clear: both;
+  content: '';
+  display: table;
 }
-.pl-countdown > span:first-child:before {
-  content: normal;
+.pl-countdown > div {
+  float: left;
+  width: 25%;
+}
+.pl-countdown .pl-digit {
+  display: block;
+}
+.pl-countdown .pl-label {
+  display: block;
+  font-size: 40%;
 }

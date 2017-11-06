@@ -77,17 +77,23 @@ module pl {
                 secondsWrapper = Element.create('div');
 
             // Create digits.
-            let days    = Element.create('span.pl-days'),
-                hours   = Element.create('span.pl-hours'),
-                minutes = Element.create('span.pl-minutes'),
-                seconds = Element.create('span.pl-seconds');
+            let days    = Element.create('span.pl-days.pl-digit'),
+                hours   = Element.create('span.pl-hours.pl-digit'),
+                minutes = Element.create('span.pl-minutes.pl-digit'),
+                seconds = Element.create('span.pl-seconds.pl-digit');
 
             // Create labels.
-            let daysLabel    = Element.create('span.pl-days-label'),
-                hoursLabel   = Element.create('span.pl-hours-label'),
-                minutesLabel = Element.create('span.pl-minutes-label'),
-                secondsLabel = Element.create('span.pl-seconds-label');
+            let daysLabel    = Element.create('span.pl-days-label.pl-label'),
+                hoursLabel   = Element.create('span.pl-hours-label.pl-label'),
+                minutesLabel = Element.create('span.pl-minutes-label.pl-label'),
+                secondsLabel = Element.create('span.pl-seconds-label.pl-label');
 
+
+            // Set digits.
+            days.text("00");
+            hours.text("00");
+            minutes.text("00");
+            seconds.text("00");
 
             // Set labels.
             daysLabel.text(this.settings['daysLabel']);
@@ -101,17 +107,10 @@ module pl {
                 daysWrapper, hoursWrapper, minutesWrapper, secondsWrapper
             ]));
 
-            daysWrapper.append(days);
-            daysWrapper.append(daysLabel);
-
-            hoursWrapper.append(hours);
-            hoursWrapper.append(hoursLabel);
-
-            minutesWrapper.append(minutes);
-            minutesWrapper.append(minutesLabel);
-
-            secondsWrapper.append(seconds);
-            secondsWrapper.append(secondsLabel);
+            daysWrapper.append(ElementCollection.fromArray([ days, daysLabel ]));
+            hoursWrapper.append(ElementCollection.fromArray([ hours, hoursLabel ]));
+            minutesWrapper.append(ElementCollection.fromArray([ minutes, minutesLabel ]));
+            secondsWrapper.append(ElementCollection.fromArray([ seconds, secondsLabel ]));
 
 
             // Point to digit elements.
@@ -127,10 +126,15 @@ module pl {
          * @param {Object} timeRemaining
          */
         private update(timeRemaining: Object) {
-            this.days.text(timeRemaining['days']);
-            this.hours.text(timeRemaining['hours']);
-            this.minutes.text(timeRemaining['minutes']);
-            this.seconds.text(timeRemaining['seconds']);
+            let days = this.pad("" + timeRemaining['days'], 2),
+                hours = this.pad("" + timeRemaining['hours'], 2),
+                minutes = this.pad("" + timeRemaining['minutes'], 2),
+                seconds = this.pad("" + timeRemaining['seconds'], 2);
+
+            this.days.text(days);
+            this.hours.text(hours);
+            this.minutes.text(minutes);
+            this.seconds.text(seconds);
 
         }
         // endregion
@@ -144,9 +148,9 @@ module pl {
         getTimeRemaining(endtime): Object {
             let timeRemaining = endtime.getTime() - new Date().getTime();
             let days    = Math.floor( timeRemaining / ( 1000 * 60 * 60 * 24 ) ),
-                hours   = Math.floor( timeRemaining % ( 1000 * 60 * 60 * 24 ) / ( 1000 * 60 * 60 ) ),
-                minutes = Math.floor( timeRemaining % ( 1000 * 60 * 60 ) / ( 1000 * 60 ) ),
-                seconds = Math.floor( timeRemaining % ( 1000 * 60 ) / ( 1000 ) );
+                hours   = Math.floor( ( timeRemaining / ( 1000 * 60 * 60 ) ) % 24 ),
+                minutes = Math.floor( ( timeRemaining / 1000 / 60 ) % 60  ),
+                seconds = Math.floor( ( timeRemaining / 1000 ) % 60 );
 
             return {
                 'total'  : timeRemaining,
@@ -182,6 +186,17 @@ module pl {
          */
         isEndtimeValid(endtime: string): boolean {
             throw 'Not implemented yet';
+        }
+
+        /**
+         * Add zero's before an string indicated by max.
+         * @param {string} str
+         * @param {number} max
+         * @returns {boolean}
+         */
+        pad(str: string, max: number) {
+            str = str.toString();
+            return str.length < max ? this.pad("0" + str, max) : str;
         }
 
         /**
