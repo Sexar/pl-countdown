@@ -162,7 +162,7 @@ module pl {
          * @returns {boolean}
          */
         isDateValid(date: string): boolean {
-            return /^((\d{1,2})[\-\/]){2}(\d{1,4})$/.test(date);
+            return /^(\d{1,4})([\-\/](\d{1,2})){2}$/.test(date);
         }
 
         /**
@@ -180,7 +180,17 @@ module pl {
          * @returns {boolean}
          */
         isEndtimeValid(endtime: string): boolean {
-            throw 'Not implemented yet';
+            // Trim string.
+            let datetime = endtime.replace(/^\s+|\s+$/g, ''),
+                parts = datetime.split(" ");
+
+            if (parts.length === 1) {
+                return this.isDateValid(parts[0]);
+            } else if (parts.length === 2) {
+                return this.isDateValid(parts[0]) && this.isTimeValid(parts[1]);
+            } else {
+                return false;
+            }
         }
 
         /**
