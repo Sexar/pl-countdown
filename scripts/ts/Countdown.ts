@@ -39,10 +39,10 @@ module pl {
 
         /**
          * Create a countdown instance.
-         * @param {Date} endtime
+         * @param {Date|string} endtime
          * @param {Object} settings
          */
-        constructor(endtime: Date, settings: Object = {}) {
+        constructor(endtime: any, settings: Object = {}) {
             super(document.createElement('div'));
 
             this.endtime = endtime;
@@ -142,10 +142,16 @@ module pl {
          */
         getTimeRemaining(endtime): Object {
             let timeRemaining = endtime.getTime() - new Date().getTime();
-            let days    = Math.floor( timeRemaining / ( 1000 * 60 * 60 * 24 ) ),
+            let days, hours, minutes, seconds;
+
+            if (timeRemaining > 0) {
+                days    = Math.floor( timeRemaining / ( 1000 * 60 * 60 * 24 ) ),
                 hours   = Math.floor( ( timeRemaining / ( 1000 * 60 * 60 ) ) % 24 ),
                 minutes = Math.floor( ( timeRemaining / 1000 / 60 ) % 60  ),
                 seconds = Math.floor( ( timeRemaining / 1000 ) % 60 );
+            } else {
+                days = hours = minutes = seconds = 0;
+            }
 
             return {
                 'total'  : timeRemaining,
@@ -162,7 +168,7 @@ module pl {
          * @returns {boolean}
          */
         isDateValid(date: string): boolean {
-            return /^(\d{1,4})([\-\/](\d{1,2})){2}$/.test(date);
+            return /^(\d{1,4})[\-\/]([1-9]|1[012])[-\/]([1-9]|[12]\d|3[01])$/.test(date);
         }
 
         /**
@@ -214,7 +220,7 @@ module pl {
                 this.update(timeRemaining);
 
                 if (timeRemaining['total'] <= 0) {
-                    clearInterval(this.interval)
+                    clearInterval(this.interval);
                 }
             }, 1000);
         }
@@ -231,22 +237,24 @@ module pl {
         /**
          * Endtime property.
          */
-        private _endtime: Date;
+        private _endtime: any;
 
         /**
          * Gets endtime property.
-         * @returns {Date}
+         * @returns {Date|string}
          */
-        get endtime(): Date {
+        get endtime(): any {
             return this._endtime;
         }
 
         /**
          * Sets endtime property.
-         * @param {Date} value
+         * @param {Date|string} value
          */
-        set endtime(value: Date) {
-            this._endtime = value;
+        set endtime(value: any) {
+            if (value instanceof Date) { this._endtime = value; }
+            else if ("string" === typeof value && this.isEndtimeValid(value)) { this._endtime = new Date(value); }
+            else { this._endtime = new Date(); }
         }
         // endregion
 
