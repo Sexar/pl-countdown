@@ -10,7 +10,7 @@ module pl {
          * @param {Array<Object>} objects
          * @return {Object}
          */
-        static extends(...objects) {
+        static extendsDefaults(...objects) {
             let result: Object = {}, i: number;
 
             for (i = 0; i < objects.length; i++) {

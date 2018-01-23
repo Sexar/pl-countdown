@@ -103,6 +103,7 @@ gulp.task('ts', () => {
 
     // Output file.
     let outputFile = 'pl-countdown.min.ts';
+    // let outputFile = 'pl-countdown.ts';
 
     return gulp.src(srcFiles)
         .pipe(plumber())

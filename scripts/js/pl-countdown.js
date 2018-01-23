@@ -807,7 +807,7 @@ var pl;
          * @param {Array<Object>} objects
          * @return {Object}
          */
-        Util.extends = function () {
+        Util.extendsDefaults = function () {
             var objects = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 objects[_i] = arguments[_i];
@@ -845,7 +845,7 @@ var pl;
             if (settings === void 0) { settings = {}; }
             var _this = _super.call(this, document.createElement('div')) || this;
             _this.endtime = endtime;
-            _this.settings = pl.Util.extends({
+            _this.settings = pl.Util.extendsDefaults({
                 'separator': ':',
                 'daysLabel': 'Days',
                 'hoursLabel': 'Hours',

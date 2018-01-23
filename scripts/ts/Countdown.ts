@@ -46,7 +46,7 @@ module pl {
             super(document.createElement('div'));
 
             this.endtime = endtime;
-            this.settings = Util.extends({
+            this.settings = Util.extendsDefaults({
                 'separator': ':',
                 'daysLabel': 'Days',
                 'hoursLabel': 'Hours',
