@@ -224,7 +224,7 @@ module pl {
          */
         parseDate(date, format) {
             let parts = date.match(/(\d+)/g);
-            
+
 
             format = format || 'yyyy-mm-dd';
 
