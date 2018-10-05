@@ -1,9 +1,18 @@
 /**
- * Created by cesarmejia on 22/10/2017.
+ * Created by cesarmejia on 07/02/2018.
  */
 module pl {
 
     export class Util {
+
+        /**
+         * Capitalize text.
+         * @param {string} text
+         * @returns {string}
+         */
+        static capitalizeText(text: string) {
+            return text.replace(/\w/, l => l.toUpperCase() );
+        }
 
         /**
          * Merge objects and create a new one.

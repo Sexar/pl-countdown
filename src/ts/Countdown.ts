@@ -6,6 +6,7 @@ module pl {
     export class Countdown extends Element<HTMLElement> {
 
         // region Fields
+
         /**
          * @type {Element<HTMLElement>}
          */
@@ -35,23 +36,25 @@ module pl {
          * @type {number}
          */
         private interval: number;
+
         // endregion
 
         /**
          * Create a countdown instance.
-         * @param {Date|string} endtime
+         * @param {Date|string} endTime
          * @param {Object} settings
          */
-        constructor(endtime: any, settings: Object = {}) {
+        constructor(endTime: any, settings: Object = {}) {
             super(document.createElement('div'));
 
-            this.endtime = endtime;
+            this.endTime = endTime;
             this.settings = Util.extendsDefaults({
-                'separator': ':',
-                'daysLabel': 'Days',
-                'hoursLabel': 'Hours',
-                'minutesLabel': 'Minutes',
-                'secondsLabel': 'Seconds'
+                dateFormat: 'yyyy-mm-dd',
+                separator: ':',
+                daysLabel: 'Days',
+                hoursLabel: 'Hours',
+                minutesLabel: 'Minutes',
+                secondsLabel: 'Seconds'
             }, settings);
 
             this.addClass('pl-countdown');
@@ -61,6 +64,7 @@ module pl {
         }
 
         // region Private Methods
+
         /**
          * Create countdown elements.
          */
@@ -132,16 +136,18 @@ module pl {
             this.seconds.text(seconds);
 
         }
+
         // endregion
 
         // region Methods
+
         /**
-         * Get time remaining from a now to a endtime.
-         * @param {Date} endtime
+         * Get time remaining from a now to a endTime.
+         * @param {Date} endTime
          * @returns {Object}
          */
-        getTimeRemaining(endtime): Object {
-            let timeRemaining = endtime.getTime() - new Date().getTime();
+        getTimeRemaining(endTime): Object {
+            let timeRemaining = endTime.getTime() - new Date().getTime();
             let days, hours, minutes, seconds;
 
             if (timeRemaining > 0) {
@@ -181,13 +187,13 @@ module pl {
         }
 
         /**
-         * Validate endtime.
-         * @param {string} endtime
+         * Validate endTime.
+         * @param {string} endTime
          * @returns {boolean}
          */
-        isEndtimeValid(endtime: string): boolean {
+        isEndtimeValid(endTime: string): boolean {
             // Trim string.
-            let datetime = endtime.replace(/^\s+|\s+$/g, ''),
+            let datetime = endTime.replace(/^\s+|\s+$/g, ''),
                 parts = datetime.split(" ");
 
             if (parts.length === 1) {
@@ -211,11 +217,25 @@ module pl {
         }
 
         /**
+         * Parse date to ISO8601 format.
+         * @param {string} date
+         * @param {string} format
+         * @returns {Date}
+         */
+        parseDate(date, format) {
+            let parts = date.match(/(\d+)/g);
+            
+
+            format = format || 'yyyy-mm-dd';
+
+        }
+
+        /**
          * Starts countdown.
          */
         start() {
             this.interval = setInterval(() => {
-                let timeRemaining = this.getTimeRemaining(this.endtime);
+                let timeRemaining = this.getTimeRemaining(this.endTime);
 
                 this.update(timeRemaining);
 
@@ -231,31 +251,34 @@ module pl {
         stop() {
             clearInterval(this.interval);
         }
+
         // endregion
 
         // region Properties
+
         /**
          * Endtime property.
          */
-        private _endtime: any;
+        private _endTime: any;
 
         /**
-         * Gets endtime property.
+         * Gets endTime property.
          * @returns {Date|string}
          */
-        get endtime(): any {
-            return this._endtime;
+        get endTime(): any {
+            return this._endTime;
         }
 
         /**
-         * Sets endtime property.
+         * Sets endTime property.
          * @param {Date|string} value
          */
-        set endtime(value: any) {
-            if (value instanceof Date) { this._endtime = value; }
-            else if ("string" === typeof value && this.isEndtimeValid(value)) { this._endtime = new Date(value); }
-            else { this._endtime = new Date(); }
+        set endTime(value: any) {
+            if (value instanceof Date) { this._endTime = value; }
+            else if ("string" === typeof value && this.isEndtimeValid(value)) { this._endTime = new Date(value); }
+            else { this._endTime = new Date(); }
         }
+
         // endregion
 
     }

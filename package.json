@@ -1,5 +1,5 @@
 {
-  "name": "pl-contact-form",
+  "name": "pl-scrollfire",
   "version": "1.0.0",
   "description": "",
   "main": "gulpfile.js",
@@ -8,19 +8,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Sexar/pl-contact-form.git"
+    "url": "git+https://github.com/cesarmejiag/pl-countdown.git"
   },
   "keywords": [
-    "contact-form",
     "javascript",
-    "typescript"
+    "typescript",
+    "countdown",
+    "js",
+    "ts"
   ],
   "author": "cesarmejia",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Sexar/pl-contact-form/issues"
+    "url": "https://github.com/cesarmejiag/pl-countdown/issues"
   },
-  "homepage": "https://github.com/Sexar/pl-contact-form#readme",
+  "homepage": "https://github.com/cesarmejiag/pl-countdown#readme",
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^4.0.0",
