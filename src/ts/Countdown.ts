@@ -218,16 +218,27 @@ module pl {
 
         /**
          * Parse date to ISO8601 format.
+         * Reference: https://stackoverflow.com/questions/3085937/safari-js-cannot-parse-yyyy-mm-dd-date-format
          * @param {string} date
          * @param {string} format
          * @returns {Date}
          */
-        parseDate(date, format) {
-            let parts = date.match(/(\d+)/g);
-
+        parseDate(date: string, format: string) {
+            let parts: Array<string> = date.match(/(\d+)/g);
+            let i: number = 0, order: object = {};
 
             format = format || 'yyyy-mm-dd';
+            (format as any).replace(/(yyyy|dd|mm)/g, function(part) { order[part] = i++; });
 
+            let [ year, month, day ] = [
+                parseInt(parts[order['yyyy']]),
+                parseInt(parts[order['mm']]) - 1,
+                parseInt(parts[order['dd']])
+            ];
+
+            console.log("%s-%s-%s", year, month, day);
+
+            return new Date( year, month, day );
         }
 
         /**
